@@ -26,7 +26,6 @@ public class SipErrorListener extends BaseErrorListener {
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
 
-        throw new IllegalStateException("failed to parse at line " + line + " due to " + msg, e);
-        
+        throw new IllegalStateException("failed to parse input at position " + charPositionInLine + " due to " + msg, e);
     }
 }

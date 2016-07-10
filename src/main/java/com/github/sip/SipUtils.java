@@ -28,50 +28,104 @@ import antlr4.SipParser.CoreUriContext;
 import antlr4.SipParser.HostPortContext;
 import antlr4.SipParser.SipUriContext;
 import antlr4.SipParser.SipsUriContext;
+import antlr4.UriHeadersLexer;
+import antlr4.UriHeadersParser;
+import antlr4.UriHeadersParser.UriHeadersContext;
 
 public class SipUtils {
 
-    public static SipUriInfo parseSipUri(String sipUri) {
+    public static SipUriInfo parseSipUri(String sipUri) throws IllegalStateException {
 
         SipUriContext sipUriContext = getSipParser(sipUri).sipUri();
 
-        CoreUriContext coreUriContext = sipUriContext.coreUri();
+        log("exce" + sipUriContext.exception);
+        
+        log("sip: " + sipUriContext.SIP_SCHEME());
+        
+        log("index" + sipUriContext.getStop().getStopIndex());
+        
 
-        return parseCoreUri(coreUriContext);
+        
+        log("toString" + sipUriContext.toString());
+        
+        
+        
+        CoreUriContext coreUriContext = sipUriContext.coreUri();
+        
+
+        SipUriInfo info = new SipUriInfo();
+        
+        parseCoreUri(coreUriContext, sipUri, info);
+        
+        return info;
     }
 
-    public static SipUriInfo parseSipsUri(String sipsUri) {
+    public static SipUriInfo parseSipsUri(String sipsUri) throws IllegalStateException {
 
         SipsUriContext sipUriContext = getSipParser(sipsUri).sipsUri();
 
         CoreUriContext coreUriContext = sipUriContext.coreUri();
 
-        return parseCoreUri(coreUriContext);
+        SipUriInfo info = new SipUriInfo().setSips(true);
+        parseCoreUri(coreUriContext, sipsUri, info);
+        return info;
     }
 
-    private static SipUriInfo parseCoreUri(CoreUriContext coreUriContext) {
+    private static void parseCoreUri(CoreUriContext coreUriContext, String input, SipUriInfo info) {
 
+        log("uriIndex: " + coreUriContext.getStop().getStopIndex());
+        
         TerminalNode userInfo = coreUriContext.USER_INFO();
 
         // userInfo is an optional field need to check for null
         if (Objects.nonNull(userInfo)) {
-            log(userInfo.getText());
+            log("userinfo:" + userInfo.getText());
+            
+            // removing last char '@'
+            StringBuilder builder = new StringBuilder(userInfo.getText());
+            builder.deleteCharAt(builder.length() - 1);
+            info.setUserInfo(builder.toString());
         }
 
         HostPortContext hostPortContext = coreUriContext.hostPort();
 
-        log(hostPortContext.getText());
-
         log(hostPortContext.HOST().getText());
+        
+        info.setHost(hostPortContext.HOST().getText());
+        
 
         TerminalNode port = hostPortContext.PORT();
         if(Objects.nonNull(port)) {
             
-            log(port.getText());
+            log("port: " + port.getText());
+            // first char is ':', removing it before converting to integer
+            info.setPort(Integer.parseInt(port.getText().substring(1)));
         }
         
+        int parsedLength = coreUriContext.getStop().getStopIndex() + 1;
+        
+        
+        if(parsedLength < input.length()) {
+        
+            parseUriHeaders(input.substring(parsedLength), info);
+        }
+        // TODO pass startIndex in error listener
+        
+    }
 
-        return null;
+    
+    private static void parseUriHeaders(String input, SipUriInfo info) {
+
+        UriHeadersContext uriHeadersContext = getUriHeadersParser(input).uriHeaders();
+        
+        log("exce" + uriHeadersContext.exception);
+        
+
+        
+        log("toString" + uriHeadersContext.toString());
+        
+        // TODO
+        
     }
 
     private static SipParser getSipParser(String input) {
@@ -91,6 +145,24 @@ public class SipUtils {
 
         return parser;
     }
+    
+    private static UriHeadersParser getUriHeadersParser(String input) {
+
+        log("uriPart: " + input);
+        
+        // Get our lexer
+        UriHeadersLexer lexer = new UriHeadersLexer(new ANTLRInputStream(input));
+
+        // Get a list of matched tokens
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+
+        // Pass the tokens to the parser
+        UriHeadersParser parser = new UriHeadersParser(tokens);
+
+        parser.addErrorListener(new SipErrorListener());
+
+        return parser;
+    }
 
     private static void log(String text) {
 
@@ -100,6 +172,7 @@ public class SipUtils {
 
     public static void main(String[] args) {
 
-        parseSipUri("sip:hemant@abc.com:80;sdfssdfsfsf");
+        SipUriInfo info = parseSipUri("sip:hemant@abc.com:8:0;sdfssdfsfsf");
+        log(info.toString());
     }
 }
