@@ -32,87 +32,72 @@ sipsUri
 
 coreUri
 :
-	USER_INFO?
-; // hostPort uriParameters headers? ;
-
-// skipping telephone_subscriber part from userInfo
-
-USER_INFO
-:
-	USER
-	(
-		CH_COLON PASSWORD
-	)? CH_ATTHERATE
+	USER_INFO? hostPort
 ;
 
 hostPort
 :
-	host
-	(
-		CH_COLON PORT
-	)?
+	HOST PORT?
 ;
 
-host
+USER_INFO
 :
-	hostName
+	USER CH_ATTHERATE
+;
+
+PORT
+:
+	CH_COLON DIGIT+
+;
+
+HOST
+:
+	HOST_NAME
 	| IPV4ADDRESS
 	| IPV6REFERENCE
 ;
 
-hostName
+fragment
+USER
+:
+	(
+		UNRESERVED_ESCAPED
+		| USER_UNRESERVED
+	)+
+;
+
+// Not supporting password currently
+// 
+//PASSWORD
+//:
+//	CH_COLON
+//	(
+//		UNRESERVED_ESCAPED
+//		| PASSWORD_UNRESERVED
+//	)*
+//;
+
+fragment
+HOST_NAME
 :
 	(
 		DOMAIN_LABEL CH_DOT
 	)* TOP_LABEL CH_DOT?
 ;
 
-uriParameters
-:
-	(
-		CH_SEMICOLON uriParameter
-	)*
-;
-
-uriParameter
-:
-	TRANSPORT_PARAM
-	| USERPARAM
-	| METHOD_PARAM
-	| TTL_PARAM
-	| maddrParam
-	| LR_PARAM
-	| OTHER_PARAM
-;
-
-maddrParam
-:
-	TXT_MADDREQUAL host
-;
-
-headers
-:
-	CH_QUESTION HEADER
-	(
-		CH_QUESTION HEADER
-	)*
-;
-
-HEADER
-:
-	H_NAME CH_EQUAL H_VALUE
-;
-
+fragment
 IPV4ADDRESS
 :
 	DIGIT_1_TO_3 CH_DOT DIGIT_1_TO_3 CH_DOT DIGIT_1_TO_3 CH_DOT DIGIT_1_TO_3
 ;
 
+fragment
 IPV6REFERENCE
 :
 	CH_LEFTBRACKET IPV6ADDRESS CH_RIGHTBRACKET
 ;
 
+fragment
 IPV6ADDRESS
 :
 	HEX_PART
@@ -121,92 +106,7 @@ IPV6ADDRESS
 	)?
 ;
 
-OTHER_PARAM
-:
-	P_NAME
-	(
-		CH_EQUAL P_VALUE
-	)?
-;
-
-P_NAME
-:
-	PARAM_CHAR+
-;
-
-P_VALUE
-:
-	PARAM_CHAR+
-;
-
-METHOD
-:
-	INVITEM
-	| ACKM
-	| OPTIONSM
-	| BYEM
-	| CANCELM
-	| REGISTERM
-	| EXTENSION_METHOD
-;
-
-TRANSPORT_PARAM
-:
-	TXT_TRANSPORTEQUAL
-	(
-		TRANSPORT_UDP
-		| TRANSPORT_TCP
-		| TRANSPORT_SCTP
-		| TRANSPORT_TLS
-		| OTHER_TRANSPORT
-	)
-;
-
-USERPARAM
-:
-	TXT_USEREQUAL
-	(
-		TXT_PHONE
-		| TXT_IP
-		| OTHER_USER
-	)
-;
-
-OTHER_USER
-:
-	TOKEN
-;
-
-METHOD_PARAM
-:
-	TXT_METHODEQUAL METHOD
-;
-
-TTL_PARAM
-:
-	TXT_TTLEQUAL TTL
-;
-
-LR_PARAM
-:
-	'lr'
-;
-
-SIP_SCHEME
-:
-	'sip:'
-;
-
-SIPS_SCHEME
-:
-	'sips:'
-;
-
-TXT_MADDREQUAL
-:
-	'maddr='
-;
-
+fragment
 DOMAIN_LABEL
 :
 	ALPHA_NUM
@@ -220,6 +120,7 @@ DOMAIN_LABEL
 	)
 ;
 
+fragment
 TOP_LABEL
 :
 	ALPHA
@@ -233,6 +134,7 @@ TOP_LABEL
 	)
 ;
 
+fragment
 HEX_PART
 :
 	HEX_SEQ
@@ -246,247 +148,6 @@ HEX_PART
 	)
 ;
 
-PORT
-:
-	DIGIT+
-;
-
-fragment
-USER
-:
-	(
-		UNRESERVED_ESCAPED
-		| USER_UNRESERVED
-	)+
-;
-
-fragment
-PASSWORD
-:
-	(
-		UNRESERVED_ESCAPED
-		| CH_AMPERSAND
-		| CH_EQUAL
-		| CH_PLUS
-		| CH_DOLLAR
-		| CH_COMMA
-	)*
-;
-
-fragment
-UNRESERVED_ESCAPED
-:
-	UNRESERVED
-	| ESCAPED
-;
-
-fragment
-USER_UNRESERVED
-:
-	CH_AMPERSAND
-	| CH_EQUAL
-	| CH_PLUS
-	| CH_DOLLAR
-	| CH_COMMA
-	| CH_SEMICOLON
-	| CH_QUESTION
-	| CH_FWDSLASH
-;
-
-fragment
-PARAM_CHAR
-:
-	PARAM_UNRESERVED
-	| UNRESERVED_ESCAPED
-;
-
-fragment
-ESCAPED
-:
-	CH_PERCENT HEX_DIG HEX_DIG
-;
-
-fragment
-UNRESERVED
-:
-	ALPHA_NUM
-	| MARK
-;
-
-fragment
-HNV_UNRESERVED
-:
-	CH_RIGHTBRACKET
-	| CH_LEFTBRACKET
-	| CH_FWDSLASH
-	| CH_COLON
-	| CH_QUESTION
-	| CH_PLUS
-	| CH_DOLLAR
-;
-
-fragment
-H_NAME
-:
-	(
-		HNV_UNRESERVED
-		| UNRESERVED_ESCAPED
-	)+
-;
-
-fragment
-H_VALUE
-:
-	(
-		HNV_UNRESERVED
-		| UNRESERVED_ESCAPED
-	)*
-;
-
-fragment
-TRANSPORT_UDP
-:
-	'udp'
-;
-
-fragment
-TRANSPORT_TCP
-:
-	'tcp'
-;
-
-fragment
-TRANSPORT_SCTP
-:
-	'sctp'
-;
-
-fragment
-TRANSPORT_TLS
-:
-	'tls'
-;
-
-fragment
-OTHER_TRANSPORT
-:
-	TOKEN
-;
-
-fragment
-PARAM_UNRESERVED
-:
-	CH_RIGHTBRACKET
-	| CH_LEFTBRACKET
-	| CH_FWDSLASH
-	| CH_COLON
-	| CH_AMPERSAND
-	| CH_PLUS
-	| CH_DOLLAR
-;
-
-fragment
-TTL
-:
-	DIGIT_1_TO_3
-;
-
-fragment
-TXT_TRANSPORTEQUAL
-:
-	'transport='
-;
-
-fragment
-TXT_USEREQUAL
-:
-	'user='
-;
-
-fragment
-TXT_METHODEQUAL
-:
-	'method='
-;
-
-fragment
-TXT_TTLEQUAL
-:
-	'ttl='
-;
-
-fragment
-TXT_PHONE
-:
-	'phone'
-;
-
-fragment
-TXT_IP
-:
-	'ip'
-;
-
-fragment
-INVITEM
-:
-	'INVITE'
-;
-
-fragment
-ACKM
-:
-	'ACK'
-;
-
-fragment
-OPTIONSM
-:
-	'OPTIONSM'
-;
-
-fragment
-BYEM
-:
-	'BYE'
-;
-
-fragment
-CANCELM
-:
-	'CANCEL'
-;
-
-fragment
-REGISTERM
-:
-	'REGISTER'
-;
-
-fragment
-EXTENSION_METHOD
-:
-	TOKEN
-;
-
-fragment
-TOKEN
-:
-	(
-		ALPHA_NUM
-		| CH_HYPHEN
-		| CH_DOT
-		| CH_NOT
-		| CH_PERCENT
-		| CH_STAR
-		| CH_UNDERSCORE
-		| CH_PLUS
-		| CH_CURLYQUOTE
-		| CH_SINGLEQUOTE
-		| CH_TILDE
-	)+
-;
-
 fragment
 HEX_SEQ
 :
@@ -495,8 +156,6 @@ HEX_SEQ
 		CH_COLON HEX_DIGIT_1_TO_4
 	)*
 ;
-
-//need to check a better way
 
 fragment
 DIGIT_1_TO_3
@@ -515,30 +174,43 @@ HEX_DIGIT_1_TO_4
 	| HEX_DIG HEX_DIG HEX_DIG HEX_DIG
 ;
 
-fragment
-MARK
+SIP_SCHEME
 :
-	CH_HYPHEN
-	| CH_UNDERSCORE
-	| CH_DOT
-	| CH_NOT
-	| CH_TILDE
-	| CH_STAR
-	| CH_SINGLEQUOTE
-	| CH_LEFTBRACE
-	| CH_RIGHTBRACE
+	'sip:'
+;
+
+SIPS_SCHEME
+:
+	'sips:'
+;
+
+fragment
+UNRESERVED_ESCAPED
+:
+	UNRESERVED
+	| ESCAPED
+;
+
+fragment
+UNRESERVED
+:
+	ALPHA_NUM
+	| MARK
+;
+
+ESCAPED
+:
+	CH_PERCENT HEX_DIG HEX_DIG
 ;
 
 fragment
 HEX_DIG
 :
 	DIGIT
-	| 'A'
-	| 'B'
-	| 'C'
-	| 'D'
-	| 'E'
-	| 'F'
+	|
+	(
+		'A' .. 'F'
+	)
 ;
 
 fragment
@@ -565,26 +237,58 @@ DIGIT
 	)
 ;
 
+fragment
+USER_UNRESERVED
+:
+	CH_AMPERSAND
+	| CH_EQUAL
+	| CH_PLUS
+	| CH_DOLLAR
+	| CH_COMMA
+	| CH_SEMICOLON
+	| CH_QUESTION
+	| CH_FWDSLASH
+;
+
+fragment
+MARK
+:
+	CH_HYPHEN
+	| CH_UNDERSCORE
+	| CH_DOT
+	| CH_NOT
+	| CH_TILDE
+	| CH_STAR
+	| CH_SINGLEQUOTE
+	| CH_LEFTBRACE
+	| CH_RIGHTBRACE
+;
+
+fragment
 CH_AMPERSAND
 :
 	'&'
 ;
 
+fragment
 CH_EQUAL
 :
 	'='
 ;
 
+fragment
 CH_PLUS
 :
 	'+'
 ;
 
+fragment
 CH_DOLLAR
 :
 	'$'
 ;
 
+fragment
 CH_COMMA
 :
 	','
@@ -592,24 +296,28 @@ CH_COMMA
 
 CH_SEMICOLON
 :
-	':'
+	';'
 ;
 
+fragment
 CH_QUESTION
 :
 	'?'
 ;
 
+fragment
 CH_ATTHERATE
 :
 	'@'
 ;
 
+fragment
 CH_COLON
 :
 	':'
 ;
 
+fragment
 CH_DOT
 :
 	'.'

@@ -20,14 +20,18 @@ grammar Stack;
 package antlr4;
 }
 
+ SIP_SCHEME         : 'sip:';
+
     sipUri          : SIP_SCHEME coreUri EOF ;
-    coreUri         : USER_INFO? hostPort ;
+    coreUri         : userInfo? hostPort ;
     hostPort        : 'abc.com' ;
 
-    SIP_SCHEME           : 'sip:';
-    USER_INFO            : USER PASSWORD? '@' ;
-    fragment USER        : ALPHA_NUM+ ;
-    fragment PASSWORD    : ':' ALPHA_NUM+ ;
-    fragment ALPHA_NUM   :  ALPHA | DIGIT ;
-    fragment ALPHA       : ('a'..'z' | 'A'..'Z') ;
-    fragment DIGIT       : ('0'..'9') ;
+
+    
+    userInfo           : USER PASSWORD? '@' ;
+     USER        : ALPHA_NUM+ ;
+     PASSWORD    : ':' ALPHA_NUM+ ;
+     ALPHA_NUM   :  ALPHA | DIGIT ;
+     ALPHA       : ('a'..'z' | 'A'..'Z') ;
+     DIGIT       : ('0'..'9') ;
+    
