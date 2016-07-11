@@ -22,10 +22,23 @@ import org.antlr.v4.runtime.Recognizer;
 
 public class SipErrorListener extends BaseErrorListener {
 
+    // length of the string already parsed
+    private int parsedLength;
+
+    public SipErrorListener() {
+
+    }
+
+    public SipErrorListener(int parsedLength) {
+
+        this.parsedLength = parsedLength;
+    }
+
     @Override
     public void syntaxError(Recognizer<?, ?> recognizer, Object offendingSymbol, int line, int charPositionInLine,
             String msg, RecognitionException e) {
 
-        throw new IllegalStateException("failed to parse input at position " + charPositionInLine + " due to " + msg, e);
+        throw new IllegalStateException(String.format("Parsing failed at position %d due to %s", parsedLength
+                + charPositionInLine, msg), e);
     }
 }

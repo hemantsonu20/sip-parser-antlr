@@ -29,7 +29,7 @@ public class SipUriInfo {
 
     private String host;
 
-    private int port;
+    private int port = -1;
 
     private Map<String, String> uriParameters = new LinkedHashMap<String, String>(0);
 
