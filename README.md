@@ -1,7 +1,6 @@
 # sip-parser-antlr
-- - - - 
+----
 ## Overview
-===========
 A sip uri parser written with using [antlr](http://www.antlr.org/)
 
 The grammar of the sip uri is based on the [RFC-3261](https://www.ietf.org/rfc/rfc3261.txt) with some minor exceptions.
