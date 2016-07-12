@@ -168,6 +168,40 @@ public class TestSipUtils {
         assertEquals("v3", headers.get("h3"));
         assertEquals("v4", headers.get("h4"));
     }
+    
+    @Test
+    public void testSipUriWithComplexInputs() {
+
+        SipUriInfo info = SipUtils.parseSipUri("sip:198.11.254.102:5060;transport=udp;lr");
+        assertFalse(info.isSips());
+        assertEquals("198.11.254.102", info.getHost());
+        assertEquals(5060, info.getPort());
+        Map<String, String> params = info.getUriParameters();
+        assertEquals("udp", params.get("transport"));
+        assertTrue(params.containsKey("lr"));
+        assertEquals(null, params.get("lr"));
+
+        info = SipUtils.parseSipUri("sip:+919013982184@67.231.5.176:5060");
+        assertFalse(info.isSips());
+        assertEquals("+919013982184", info.getUserInfo());
+        assertEquals("67.231.5.176", info.getHost());
+        assertEquals(5060, info.getPort());
+
+        info = SipUtils.parseSipUri("sip:919013982184@sip-trunk-bandwidth.tropo.com");
+        assertFalse(info.isSips());
+        assertEquals("919013982184", info.getUserInfo());
+        assertEquals("sip-trunk-bandwidth.tropo.com", info.getHost());
+
+        info = SipUtils.parseSipUri("sip:919013982184@github-ssl-dev.tropo.com:5061;x-php-called=+12146420000;user=phone;x-php-tenant=dec55d7a-9d08-4a12-a9a7-052939c29ae0");
+        assertFalse(info.isSips());
+        assertEquals("919013982184", info.getUserInfo());
+        assertEquals("github-ssl-dev.tropo.com", info.getHost());
+        assertEquals(5061, info.getPort());
+        params = info.getUriParameters();
+        assertEquals("+12146420000", params.get("x-php-called"));
+        assertEquals("phone", params.get("user"));
+        assertEquals("dec55d7a-9d08-4a12-a9a7-052939c29ae0", params.get("x-php-tenant"));
+    }
 
     @Test
     public void testInvalidSipUri() {
@@ -241,8 +275,5 @@ public class TestSipUtils {
             fail("IllegalStateException expected");
         } catch (IllegalStateException e) {
         }
-    }
-
-    // complex
-    // with ip
+    }    
 }
