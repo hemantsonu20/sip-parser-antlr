@@ -17,6 +17,7 @@
 		<antlr.version>4.5.3</antlr.version>
 		<gpg.version>1.6</gpg.version>
 		<release.version>2.5.3</release.version>
+		<javadoc.version>2.10.4</javadoc.version>
 	</properties>
 
 	<parent>
@@ -89,7 +90,7 @@
 				</executions>
 			</plugin>
 		</plugins>
-		
+
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -102,9 +103,14 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>${release.version}</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${javadoc.version}</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
-		
+
 	</build>
 
 </project>
