@@ -42,7 +42,6 @@ For more examples see [TestSipUtils](src/test/java/com/github/sip/TestSipUtils.j
 ```
 
 ## Latest Published Version
-===========================
 1.0.0 published on July 13th 2016
 
 ## License
