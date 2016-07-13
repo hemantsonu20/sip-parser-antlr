@@ -1,10 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.hemantsonu20</groupId>
 	<artifactId>sip-parser-antlr</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hemantsonu20/sip-parser-antlr</url>
 	<description>A Sip parser</description>
@@ -47,7 +46,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/hemantsonu20/sip-parser-antlr.git</connection>
 		<developerConnection>scm:git:git@github.com:hemantsonu20/sip-parser-antlr.git</developerConnection>
-		<tag>${project.version}</tag>
+		<tag>sip-parser-antlr-1.0.0</tag>
 		<url>https://github.com/hemantsonu20/sip-parser-antlr</url>
 	</scm>
 
