@@ -3,7 +3,7 @@
 	<groupId>com.github.hemantsonu20</groupId>
 	<artifactId>sip-parser-antlr</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>${project.groupId}:${project.artifactId}</name>
 	<url>https://github.com/hemantsonu20/sip-parser-antlr</url>
 	<description>A Sip parser</description>
@@ -46,7 +46,7 @@
 	<scm>
 		<connection>scm:git:git://github.com/hemantsonu20/sip-parser-antlr.git</connection>
 		<developerConnection>scm:git:git@github.com:hemantsonu20/sip-parser-antlr.git</developerConnection>
-		<tag>sip-parser-antlr-1.0.0</tag>
+		<tag>${project.version}</tag>
 		<url>https://github.com/hemantsonu20/sip-parser-antlr</url>
 	</scm>
 
