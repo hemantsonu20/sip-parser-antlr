@@ -103,11 +103,6 @@
 					<artifactId>maven-release-plugin</artifactId>
 					<version>${release.version}</version>
 				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>${javadoc.version}</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 

@@ -43,7 +43,7 @@ public class SipUtils {
      * way. For example a sip uri is of the form
      * 
      * <pre>
-     * <sip:hemant@abc.com:80;uriParam1=uriValue1;uriParam2?headerKey=headerValue
+     * sip:hemant@abc.com:80;uriParam1=uriValue1;uriParam2?headerKey=headerValue
      * </pre>
      * 
      * This method will parse the individual details of sip uri such as
@@ -76,10 +76,10 @@ public class SipUtils {
      * uri.
      * 
      * <pre>
-     * <sip:hemant@abc.com:80;uriParam1=uriValue1;uriParam2?headerKey=headerValue
+     * sip:hemant@abc.com:80;uriParam1=uriValue1;uriParam2?headerKey=headerValue
      * </pre>
      * 
-     * @param sipUri
+     * @param sipsUri
      *            string representing a sip uri to be parsed.
      * @return an object of {@link SipUriInfo} class containing sip uri details
      * @throws IllegalStateException
